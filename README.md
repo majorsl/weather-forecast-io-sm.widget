@@ -26,3 +26,4 @@ Aqua, Climacons-Color, Grzanka, TWCNew, Yahoo, tick, Climacons, Crystal, Reall, 
 
 If you want to build your own icon set from other icons make sure to name them with the same names as the delivered icons.
 
+![screenshot](/screenshot.png?raw=true "Screenshot")
