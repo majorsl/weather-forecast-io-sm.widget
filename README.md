@@ -4,7 +4,7 @@ I liked the original, but wanted things customized to my liking. It has been mod
 
 # Weather Forecast-IO-SM
 A Ubersicht widget to display the current weather for a location along with a multi-day forecast. By default the widget fetches the currently
-conditions and forecast for the next 7 days and displays them. However, when the NWS issues any type weather alert then the widget has a 3rd
+conditions and forecast for the next 8 days and displays them. However, when the NWS issues any type weather alert then the widget has a 3rd
 "panel" that appears on the right which shows an alert with the severe alert details/description.
 
 # Install

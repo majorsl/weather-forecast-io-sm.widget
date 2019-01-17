@@ -1,5 +1,5 @@
 iconSet = "Yahoo"
-numberOfDays = 7 # max of 8 days
+numberOfDays = 8 # max of 8 days
 numberOfAlerts = 2
 latitude = "44.804690"
 longitude = "-74.678010"
@@ -17,18 +17,19 @@ style: """
   font-family: Helvetica Neue
   color: #fff
   padding 10px 10px 15px
-  border-radius 5px
+  border-radius 3px
   .weather
     display: flex
   .alert-container
     display: flex
     flex-direction: column
     justify-content: center
-    border-style: solid
-    border-width: 1px
-    border-color: #262626
-    border-radius: 9px
-    background: rgba(#000, .5)
+    background: rgba(#FFFDB8, .4)
+  .alertforecast
+    font-size: 12px
+    max-width: 650px
+    text-shadow: black 1px 1px 0px
+    font-weight: bolder
   .text-container
     display: flex
     flex-direction: column
@@ -36,7 +37,7 @@ style: """
     border-style: solid
     border-width: 1px
     border-color: #262626
-    border-radius: 9px
+    border-radius: 3px
     background: rgba(#000, .5)
     padding-left 5px
   .image-container
@@ -48,7 +49,7 @@ style: """
     border-style: solid
     border-width: 1px
     border-color: #262626
-    border-radius: 9px
+    border-radius: 1px
     background: rgba(#000, .5)
   .conditions
     font-size: 20px
@@ -91,7 +92,7 @@ style: """
   .desc
     float: left
   .hi
-    color: #EFF2D1
+    color: #ffa291
     position: relative
     font-size: 12px
   .low
@@ -111,6 +112,7 @@ style: """
 render: -> """
   <div class="weather">
     <div class="alert-container">
+      <div class="alertforecast"></div>
     </div>
     <div class="text-container">
       <div class="forecast"></div>
@@ -146,7 +148,7 @@ update: (output, domEl) ->
   # moon phase (possibly future use)
   # moon = weatherData.daily.data[0].moonPhase
 
-  # forecast
+  # forecast-alerts
   if showForecast == 1 || weatherData.hasOwnProperty('alerts')
     forecast = ""
     if weatherData.hasOwnProperty('alerts')
@@ -155,20 +157,18 @@ update: (output, domEl) ->
       else
         maxAlerts = weatherData.alerts.length
       for i in [0..maxAlerts-1]
-        forecast = forecast + "<div style='white-space: pre-wrap; color:#f34b38'>" + weatherData.alerts[i].title + ": <span style='color:#D0EDC5'> Expires " + new Date(weatherData.alerts[i].expires * 1000).toLocaleDateString('en-US', { weekday: 'short', hour: 'numeric', minute: 'numeric' });"</div>"
+        forecast = forecast + "<div style='white-space: pre-wrap; color:#f34b38; padding-left:5px'>" + weatherData.alerts[i].title + ": <span style='color:#D0EDC5'> Expires " + new Date(weatherData.alerts[i].expires * 1000).toLocaleDateString('en-US', { weekday: 'short', hour: 'numeric', minute: 'numeric' });"</div>"
         forecast = forecast + "<span style='color:white'><br>" + weatherData.alerts[i].description + "<p>"
         forecast = forecast.replace(/\n/g, " ")
         forecast = forecast.replace(/\*/g, "\n* ")
-      # today forecast only while in weather alert
-      forecastDate = "<div class=datetoday>Today </div>"
-      forecastTemps = "<div class=temp><span class=hi>" + Math.round(weatherData.daily.data[0].temperatureMax) + "°</span><span class=low>&#8675;" + Math.round(weatherData.daily.data[0].temperatureMin)+ "°</span></div>"
-      forecastDescr = "<div class=desc>" + weatherData.daily.data[i].summary + "</div>"
-      forecast = forecast + forecastDate + forecastTemps + forecastDescr
+    forecast = forecast.replace(/ +/g, " ")
+    $(domEl).find('.alertforecast').html(forecast)
+  # forecast
+    forecast = ""
+    if numberOfDays > 8
+      maxDays = 8
     else
-      if numberOfDays > 8
-        maxDays = 8
-      else
-        maxDays = numberOfDays
+      maxDays = numberOfDays
       for i in [0..numberOfDays-1]
         forecastDate = "<div class=date>" + new Date(weatherData.daily.data[i].time * 1000).toLocaleDateString('en-US', {weekday: 'short'}) + "</div>"
         forecastTemps = "<div class=temp><span class=hi>" + Math.round(weatherData.daily.data[i].temperatureMax) + "°</span><span class=low>&#8675;" + Math.round(weatherData.daily.data[i].temperatureMin)+ "°</span></div>"
